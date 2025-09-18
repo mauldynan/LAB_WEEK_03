@@ -1,15 +1,11 @@
 package com.example.lab_week_03
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-
-interface CoffeeListener {
-    fun onSelected(id: Int)
-}
+import androidx.fragment.app.FragmentContainerView
 
 class MainActivity : AppCompatActivity(), CoffeeListener {
 
@@ -18,23 +14,31 @@ class MainActivity : AppCompatActivity(), CoffeeListener {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.fragment_container)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        Log.d(TAG, "onCreate")
+        // Tambahkan ListFragment pertama kali
+        if (savedInstanceState == null) {
+            findViewById<FragmentContainerView>(R.id.fragment_container).let { containerLayout ->
+                val listFragment = ListFragment()
+                supportFragmentManager.beginTransaction()
+                    .add(containerLayout.id, listFragment)
+                    .commit()
+            }
+        }
     }
 
     override fun onSelected(id: Int) {
-        val detailFragment = supportFragmentManager
-            .findFragmentById(R.id.fragment_detail) as? DetailFragment
-
-        detailFragment?.setCoffeeData(id)
-    }
-
-    companion object {
-        private const val TAG = "MainActivity"
+        // Ganti fragment ke DetailFragment ketika item diklik
+        findViewById<FragmentContainerView>(R.id.fragment_container).let { containerLayout ->
+            val detailFragment = DetailFragment.newInstance(id)
+            supportFragmentManager.beginTransaction()
+                .replace(containerLayout.id, detailFragment)
+                .addToBackStack(null)
+                .commit()
+        }
     }
 }

@@ -31,6 +31,7 @@ class ListFragment : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Set click listener untuk setiap item
         listOf(
             R.id.affogato,
             R.id.americano,
@@ -43,16 +44,5 @@ class ListFragment : Fragment(), View.OnClickListener {
         v?.let { coffee ->
             coffeeListener.onSelected(coffee.id)
         }
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ListFragment().apply {
-                arguments = Bundle().apply {
-                    putString("param1", param1)
-                    putString("param2", param2)
-                }
-            }
     }
 }
