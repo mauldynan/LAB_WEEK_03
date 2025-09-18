@@ -9,38 +9,34 @@ import androidx.navigation.findNavController
 
 class ListFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
+        // Inflate layout for this fragment
         return inflater.inflate(R.layout.fragment_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
+        // List of coffee item views
         val coffeeList = listOf(
             view.findViewById<View>(R.id.affogato),
             view.findViewById<View>(R.id.americano),
-            view.findViewById<View>(R.id.latte)
+            view.findViewById<View>(R.id.latte),
+            view.findViewById<View>(R.id.espresso),
+            view.findViewById<View>(R.id.cappuccino)
         )
 
+        // Set click listener for each coffee item
         coffeeList.forEach { coffee ->
-            val fragmentBundle = Bundle().apply {
-                putInt(COFFEE_ID, coffee.id)
-            }
-
             coffee.setOnClickListener {
-                coffee.findNavController().navigate(
-                    R.id.coffee_id_action,
-                    fragmentBundle
-                )
+                val bundle = Bundle().apply { putInt(COFFEE_ID, coffee.id) }
+                it.findNavController().navigate(R.id.coffee_id_action, bundle)
             }
         }
     }
